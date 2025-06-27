@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 from datetime import datetime
+import os
 from screenshot import capture_contract_screenshot
 
 app = Flask(__name__)
@@ -105,3 +106,8 @@ def send_photo(chat_id, image_path, caption=None):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
     with open(image_path, 'rb') as photo:
         requests.post(url, data={"chat_id": chat_id, "caption": caption}, files={"photo": photo})
+
+# ✅ هذا السطر هو المهم لتشغيل السيرفر على Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
