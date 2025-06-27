@@ -8,7 +8,7 @@ def capture_contract_screenshot(ticker, strike, expiry):
     filename = f"{ticker}_{timestamp}.png"
     path = os.path.join("images", filename)
 
-    url = f"https://app.webull.com/options/{ticker}?strike={strike}&expiration={expiry}"
+    url = f"url = f"https://www.marketwatch.com/investing/stock/{ticker}/options"
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
