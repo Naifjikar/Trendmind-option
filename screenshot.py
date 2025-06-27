@@ -1,12 +1,22 @@
 import os
 from datetime import datetime
-from PIL import Image, ImageDraw
+from playwright.sync_api import sync_playwright
 
-def capture_contract_screenshot(ticker, price):
+def capture_contract_screenshot(ticker, strike, expiry):
     os.makedirs("images", exist_ok=True)
-    path = f"images/{ticker}_{datetime.now().strftime('%H%M%S')}.png"
-    img = Image.new('RGB', (400, 200), color=(0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.text((10, 80), f"{ticker} - ${price}", fill=(255, 255, 255))
-    img.save(path)
+    timestamp = datetime.now().strftime("%H%M%S")
+    filename = f"{ticker}_{timestamp}.png"
+    path = os.path.join("images", filename)
+
+    url = f"https://app.webull.com/options/{ticker}?strike={strike}&expiration={expiry}"
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+        page.wait_for_timeout(5000)  # ينتظر 5 ثواني لتحميل الصفحة
+
+        page.screenshot(path=path, full_page=False)
+        browser.close()
+
     return path
