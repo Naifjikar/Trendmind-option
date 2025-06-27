@@ -2,3 +2,5 @@ flask
 requests
 Pillow
 gunicorn
+pip install playwright
+playwright install
