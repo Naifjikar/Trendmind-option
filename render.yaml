@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: trendmind-option
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      playwright install
+    startCommand: gunicorn main:app
