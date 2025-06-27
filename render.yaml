@@ -1,5 +1,3 @@
 buildCommand: |
-  pip install -r requirements.txt
+  pip install Flask gunicorn requests playwright
   playwright install
-
-startCommand: gunicorn main:app
