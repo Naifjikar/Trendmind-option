@@ -2,3 +2,4 @@ flask
 gunicorn==21.2.0
 requests
 playwright
+python-telegram-bot==13.15
