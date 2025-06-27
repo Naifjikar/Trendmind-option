@@ -2,7 +2,7 @@ from flask import Flask, request
 import requests
 from datetime import datetime
 import os
-from screenshot import capture_contract_screenshot
+from screenshot import capture_contract_screenshot  # تأكد أن الملف الجديد موجود
 
 app = Flask(__name__)
 
@@ -52,7 +52,9 @@ Expiry: {expiry}
 - {target3}
 """
 
-    image_path = capture_contract_screenshot(ticker, price)
+    # ✅ التعديل هنا: نمرر البيانات الكاملة لدالة التقاط الصورة
+    image_path = capture_contract_screenshot(ticker, strike, expiry)
     send_photo(PRIVATE_CHANNEL_ID, image_path, message)
     contracts[ticker]["screenshot_entry"] = image_path
+
     return "OK", 200
