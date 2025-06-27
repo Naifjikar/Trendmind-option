@@ -1,8 +1,8 @@
 from flask import Flask, request
-import requests
+from telegram import Bot
 from datetime import datetime
 import os
-from screenshot import capture_contract_screenshot  # تأكد أن الملف الجديد موجود
+from screenshot import capture_contract_screenshot  # تأكد أن هذا الملف موجود بنفس المجلد
 
 app = Flask(__name__)
 
@@ -10,7 +10,12 @@ BOT_TOKEN = "7975838878:AAEb26zn8MdDMD-ZzHDDFJTw8QrbPDo2kKI"
 PRIVATE_CHANNEL_ID = "-1002757012569"
 PUBLIC_CHANNEL_ID = "-1002570389914"
 
+bot = Bot(token=BOT_TOKEN)
 contracts = {}
+
+def send_photo(chat_id, image_path, caption):
+    with open(image_path, 'rb') as photo:
+        bot.send_photo(chat_id=chat_id, photo=photo, caption=caption)
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -52,9 +57,12 @@ Expiry: {expiry}
 - {target3}
 """
 
-    # ✅ التعديل هنا: نمرر البيانات الكاملة لدالة التقاط الصورة
     image_path = capture_contract_screenshot(ticker, strike, expiry)
     send_photo(PRIVATE_CHANNEL_ID, image_path, message)
     contracts[ticker]["screenshot_entry"] = image_path
 
     return "OK", 200
+
+# للتشغيل المحلي فقط (اختياري)
+if __name__ == "__main__":
+    app.run(debug=True)
